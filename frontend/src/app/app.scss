@@ -1,0 +1,370 @@
+/* --- VARIABLES --- */
+:root {
+  --primary: #6366f1;
+  --bg-color: #f3f4f6;
+  --text-main: #1f2937;
+  --card-bg: rgba(255, 255, 255, 0.9);
+  --glass-border: rgba(255, 255, 255, 0.5);
+
+  --high-color: #ef4444;
+  --mid-color: #f59e0b;
+  --low-color: #10b981;
+}
+
+[data-theme='dark'] {
+  --primary: #818cf8;
+  --bg-color: #111827;
+  --text-main: #f9fafb;
+  --card-bg: rgba(31, 41, 55, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+/* --- LAYOUT & BACKGROUND --- */
+.app-container {
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  position: relative;
+  overflow-x: hidden;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.3s ease;
+}
+
+.content-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  position: relative;
+  z-index: 10;
+}
+
+/* Decorative Background Blobs */
+.shape {
+  position: absolute;
+  filter: blur(80px);
+  z-index: 0;
+  opacity: 0.6;
+}
+.shape-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: var(--primary); border-radius: 50%; }
+.shape-2 { bottom: -10%; right: -10%; width: 400px; height: 400px; background: #ec4899; border-radius: 50%; }
+
+/* --- HEADER --- */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    h1 { font-size: 2rem; margin: 0; font-weight: 800; }
+    .logo-icon { font-size: 2.5rem; width: 2.5rem; height: 2.5rem; color: var(--primary); }
+    .highlight { color: var(--primary); }
+  }
+
+  .theme-toggle {
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--text-main);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+}
+
+/* --- INPUT BAR --- */
+.input-bar {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  padding: 1rem;
+  border-radius: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  border: 1px solid var(--glass-border);
+  margin-bottom: 3rem;
+  align-items: center;
+
+  .input-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    background: rgba(0,0,0,0.03);
+    border-radius: 10px;
+    padding: 0 15px;
+    min-width: 250px;
+
+    input {
+      width: 100%;
+      border: none;
+      background: transparent;
+      padding: 15px;
+      font-size: 1.1rem;
+      color: var(--text-main);
+      outline: none;
+    }
+    .search-icon { color: gray; }
+  }
+
+  .controls {
+    display: flex;
+    gap: 10px;
+
+    .priority-select {
+      padding: 12px 20px;
+      border-radius: 10px;
+      border: 1px solid var(--glass-border);
+      background: rgba(0,0,0,0.03);
+      color: var(--text-main);
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .add-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+
+      &:hover { transform: scale(1.05); }
+      &:active { transform: scale(0.95); }
+    }
+  }
+}
+
+/* --- GRID SYSTEM --- */
+.task-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+/* --- TASK CARDS --- */
+.task-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 180px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  /* Priority Border Top */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: #ccc;
+  }
+  /* HIGH PRIORITY: Red Background / Red Text */
+  &.HIGH {
+    .priority-tag {
+      background-color: #fee2e2;
+      color: #dc2626;
+      border: 1px solid #fecaca;
+      box-shadow: 0 2px 10px rgba(220, 38, 38, 0.15); /* Soft red glow */
+    }
+    /* Optional: Make the whole card border red for high priority */
+    border-left: 4px solid #dc2626;
+  }
+
+  /* MEDIUM PRIORITY: Orange Background / Orange Text */
+  &.MEDIUM {
+    .priority-tag {
+      background-color: #ffedd5;
+      color: #ea580c;
+      border: 1px solid #fed7aa;
+    }
+    border-left: 4px solid #ea580c;
+  }
+
+  /* LOW PRIORITY: Green Background / Green Text */
+  &.LOW {
+    .priority-tag {
+      background-color: #d1fae5;
+      color: #059669;
+      border: 1px solid #a7f3d0;
+    }
+    border-left: 4px solid #059669;
+  }
+  &.HIGH::before { background: var(--high-color); }
+  &.MEDIUM::before { background: var(--mid-color); }
+  &.LOW::before { background: var(--low-color); }
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+
+    .priority-tag {
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(0,0,0,0.05);
+      color: var(--text-main);
+    }
+
+    .delete-icon {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: #9ca3af;
+      &:hover { color: var(--high-color); }
+    }
+  }
+
+  .card-body {
+    flex-grow: 1;
+    cursor: pointer;
+    p {
+      font-size: 1.2rem;
+      font-weight: 500;
+      line-height: 1.4;
+      margin: 0;
+
+      &.completed {
+        text-decoration: line-through;
+        color: #9ca3af;
+      }
+    }
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+
+    .status-text {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      font-weight: 600;
+    }
+
+    .checkbox-wrapper {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid #d1d5db;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: white;
+
+      &.checked {
+        background: var(--low-color);
+        border-color: var(--low-color);
+      }
+    }
+  }
+}
+
+/* --- EMPTY STATE --- */
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 4rem;
+  color: #9ca3af;
+
+  .huge-icon {
+    font-size: 5rem;
+    width: 5rem;
+    height: 5rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+  }
+}/* --- Date Picker Button (In Input Bar) --- */
+.date-picker-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0,0,0,0.03);
+  padding: 10px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 1px solid var(--glass-border);
+  transition: all 0.2s;
+  color: #555;
+  font-weight: 600;
+  font-size: 0.9rem;
+
+  &:hover { background: rgba(0,0,0,0.06); }
+  mat-icon { font-size: 20px; width: 20px; height: 20px; color: var(--primary); }
+}
+
+/* --- The Countdown Badge (On Card) --- */
+.countdown-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  transition: all 0.3s;
+
+  mat-icon { font-size: 14px; width: 14px; height: 14px; }
+
+  /* Urgency Colors */
+  &.critical {
+    background-color: #fee2e2;
+    color: #ef4444;
+    border: 1px solid #fecaca;
+    animation: pulse 2s infinite; /* Gentle pulsing for overdue tasks */
+  }
+
+  &.urgent {
+    background-color: #ffedd5;
+    color: #f97316;
+    border: 1px solid #fed7aa;
+  }
+
+  &.safe {
+    background-color: #e0e7ff;
+    color: #4f46e5;
+    border: 1px solid #c7d2fe;
+  }
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+/* Fix Card Footer Alignment */
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto; /* Pushes footer to bottom */
+  padding-top: 15px;
+}

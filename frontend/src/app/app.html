@@ -1,0 +1,88 @@
+<div class="app-container" [class.dark-mode]="isDark()">
+  <div class="shape shape-1"></div>
+  <div class="shape shape-2"></div>
+
+  <div class="content-wrapper">
+    <header class="main-header">
+      <div class="brand">
+        <mat-icon class="logo-icon">check_circle_outline</mat-icon>
+        <h1>Task<span class="highlight">Master</span></h1>
+      </div>
+      <button class="theme-toggle" (click)="toggleTheme()">
+        <mat-icon>{{ isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
+    </header>
+
+    <section class="input-bar">
+      <div class="input-wrapper">
+        <mat-icon class="search-icon">edit_note</mat-icon>
+        <input #taskInput
+               type="text"
+               placeholder="Next mission?"
+               (keyup.enter)="addTodo(taskInput.value); taskInput.value=''">
+      </div>
+
+      <div class="controls">
+        <div class="date-picker-btn" (click)="picker.open()">
+          <input matInput [matDatepicker]="picker" [hidden]="true"
+                 [ngModel]="newDueDate()" (ngModelChange)="newDueDate.set($event)">
+          <mat-datepicker #picker></mat-datepicker>
+
+          <mat-icon>event</mat-icon>
+          <span>{{ newDueDate() ? (newDueDate() | date:'dd MMM') : 'Set Date' }}</span>
+        </div>
+
+        <select [ngModel]="newPriority()" (ngModelChange)="newPriority.set($event)" class="priority-select">
+          <option value="HIGH">High</option>
+          <option value="MEDIUM">Medium</option>
+          <option value="LOW">Low</option>
+        </select>
+
+        <button class="add-btn" (click)="addTodo(taskInput.value); taskInput.value=''">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </section>
+
+    @if (isLoading()) {
+      <div class="loader-container"><div class="spinner"></div></div>
+    } @else {
+      <main class="task-grid">
+        @for (todo of todos(); track todo.id) {
+
+          <article class="task-card" [ngClass]="todo.priority">
+
+            <div class="card-header">
+              <span class="priority-tag">{{ todo.priority }}</span>
+              <button class="delete-icon" (click)="delete(todo.id)">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+
+            <div class="card-body" (click)="toggle(todo)">
+              <p [class.completed]="todo.completed">{{ todo.title }}</p>
+            </div>
+
+            <div class="card-footer">
+
+              @if (todo.dueDate && !todo.completed) {
+                <div class="countdown-badge"
+                     [ngClass]="getUrgencyClass(todo.dueDate)"
+                     [matTooltip]="todo.dueDate | date:'fullDate'"> <mat-icon>schedule</mat-icon>
+                  <span>{{ getRelativeTime(todo.dueDate) }}</span>
+                </div>
+              } @else {
+                <span></span>
+              }
+
+              <div class="checkbox-wrapper" [class.checked]="todo.completed" (click)="toggle(todo)">
+                <mat-icon *ngIf="todo.completed">check</mat-icon>
+              </div>
+            </div>
+
+          </article>
+        }
+      </main>
+    }
+  </div>
+</div>

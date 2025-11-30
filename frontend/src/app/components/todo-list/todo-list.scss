@@ -1,0 +1,16 @@
+.priority-badge {
+  font-size: 0.8em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-right: 8px;
+  font-weight: bold;
+
+  &.HIGH { background-color: #ffcccc; color: #cc0000; }
+  &.MEDIUM { background-color: #fff4cc; color: #997a00; }
+  &.LOW { background-color: #ccffcc; color: #006600; }
+}
+
+.completed {
+  text-decoration: line-through;
+  color: gray;
+}

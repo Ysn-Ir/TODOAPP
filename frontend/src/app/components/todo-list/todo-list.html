@@ -1,0 +1,50 @@
+<div class="todo-container">
+
+  <div class="add-task-wrapper">
+    <div class="input-group">
+      <input
+        type="text"
+        placeholder="Nouvelle tâche..."
+        [(ngModel)]="newTitle"
+        (keyup.enter)="addTodo()">
+
+      <select [(ngModel)]="newPriority" class="priority-select" [ngClass]="newPriority">
+        <option value="LOW">Low</option>
+        <option value="MEDIUM">Medium</option>
+        <option value="HIGH">High</option>
+      </select>
+    </div>
+
+    <button class="add-btn" (click)="addTodo()">
+      <span class="plus-icon">+</span>
+    </button>
+  </div>
+
+  <div class="list-wrapper">
+    <div *ngFor="let todo of todos" class="todo-card">
+
+      <div class="left-section">
+        <div
+          class="check-circle"
+          [class.checked]="todo.completed"
+          (click)="toggle(todo)">
+          <span *ngIf="todo.completed">✓</span>
+        </div>
+
+        <span class="badge" [ngClass]="todo.priority">
+          {{ todo.priority }}
+        </span>
+
+        <span class="task-title" [class.completed]="todo.completed">
+          {{ todo.title }}
+        </span>
+      </div>
+
+      <button class="delete-btn" (click)="delete(todo)">
+        <i class="trash-icon">🗑</i>
+      </button>
+
+    </div>
+  </div>
+
+</div>
